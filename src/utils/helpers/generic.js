@@ -37,6 +37,10 @@ class genericHelper {
     });
   }
 
+  static successResponse(res, status, messageObject) {
+    return res.status(status).json(messageObject);
+  }
+
   static asyncWrapper(callback) {
     return (req, res, next) => {
       callback(req, res, next).catch(next);
