@@ -1,12 +1,5 @@
 const {
   createUser,
-  findUsers,
-  findOneByUsername,
-  findOneByEmail,
-  CreateEmailVerificationOtp,
-  DeleteUserOTP,
-  findUserOtp,
-  updateVerificationStatus,
 } = require("../database/queries/user.query");
 const pool = require("../database/pgsql");
 class User {
