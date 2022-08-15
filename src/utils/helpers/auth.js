@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken")
-const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 class AuthHelper {
   static async validateData(validator, reqBody) {
     try {
@@ -33,14 +33,17 @@ class AuthHelper {
     return OTPExpiresAt;
   }
 
-  static createOTP() {
+  static async createHashedOTP() {
     const OTP = `${Math.floor(100000 + Math.random() * 900000)}`;
-    return OTP;
+    const hashedOTP = await AuthHelper.hash(OTP);
+    console.log(OTP);
+    console.log("hashedOTP", hashedOTP);
+    return hashedOTP;
   }
 
-  static async signJWT(dataObject) {
+  static async signJWT(payload) {
     const { JWT_SECRET, JWT_EXPIRES_IN } = process.env;
-    const token = await jwt.sign(dataObject, JWT_SECRET, {
+    const token = await jwt.sign(payload, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN,
     });
     return token;
@@ -53,4 +56,4 @@ class AuthHelper {
   }
 }
 
-module.exports = AuthHelper
+module.exports = AuthHelper;

@@ -5,35 +5,30 @@ const {
   validateReg,
   validateEmail,
   validateEmailVerificationOTP,
+  validateLogin,
 } = require("../validation/user.validation");
-// class Validator {
-//   static validate(validator) {
-//     return async (req, res, next) => {
-//       try {
-//         await validateData(validator, req.body);
-//         next();
-//       } catch (error) {
-//         console.log(error);
-//         return errorResponse(
-//           res,
-//           new ApiError({
-//             status: 400,
-//             message: error.details[0].message,
-//           })
-//         );
-//       }
-//     };
-//   }
-// }
 
 class Validator {
   static async validateRegInfo(req, res, next) {
     try {
-      // console.log("hereeeeee")
       await validateData(validateReg, req.body);
       next();
     } catch (error) {
-      console.log(error);
+      return errorResponse(
+        res,
+        new ApiError({
+          status: 400,
+          message: error.details[0].message,
+        })
+      );
+    }
+  }
+
+  static async validateLoginInfo(req, res, next) {
+    try {
+      await validateData(validateLogin, req.body);
+      next();
+    } catch (error) {
       return errorResponse(
         res,
         new ApiError({

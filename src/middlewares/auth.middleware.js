@@ -38,13 +38,11 @@ const authenticate = async (req, res, next) => {
       "SELECT * FROM Users WHERE user_id = $1",
       [decryptToken.id]
     );
-    // console.log(validUser);
     if (!validUser.rows[0]) {
       return errorResponse(res, notAuthorized);
     }
     decryptToken["role"] = validUser.rows[0].role;
     req.user = decryptToken;
-    console.log(req.user);
     next();
   } catch (error) {
     return res.status(500).json({
@@ -55,7 +53,6 @@ const authenticate = async (req, res, next) => {
 //  authorizing
 const authorize = async (req, res, next) => {
   try {
-    console.log(req.user);
     if (req.user.role == "Admin") {
       next();
     } else {

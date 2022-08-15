@@ -11,14 +11,18 @@ const {
   validateRegInfo,
   validateVerificationInfo,
   validateEmail,
+  validateLoginInfo,
 } = require("../middlewares/validate.middleware");
 const {
   validateUserEmail,
   validateUsername,
-  validateVerificationEmail,
+  fetchEmail,
+  fetchLoginEmail,
   checkVerificationStatus,
   createOTP,
   handleOTP,
+  validatePassword,
+  validateLoginAccess,
 } = require("../middlewares/user.middlewares");
 
 const router = express.Router();
@@ -30,12 +34,20 @@ router.post(
   validateUsername,
   userRegistration
 );
-// router.post("/user/signup", validate(validateReg), validateEmail, userRegistration);
-router.post("/user/login", userLogin);
+
+router.post(
+  "/user/login",
+  validateLoginInfo,
+  fetchLoginEmail,
+  validatePassword,
+  validateLoginAccess,
+  userLogin
+);
+
 router.post(
   "/user/verifyemail/otp",
   validateEmail,
-  validateVerificationEmail,
+  fetchEmail,
   checkVerificationStatus,
   createOTP,
   verifyEmailOTP
@@ -44,9 +56,10 @@ router.post(
 router.patch(
   "/user/verifyemail/verify",
   validateVerificationInfo,
-  validateVerificationEmail,
+  fetchEmail,
   checkVerificationStatus,
   handleOTP,
-verifyEmail);
+  verifyEmail
+);
 
 module.exports = router;

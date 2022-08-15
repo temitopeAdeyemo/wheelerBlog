@@ -1,10 +1,10 @@
 const { response } = require("express");
-const ApiError = require("../error/api.error")
+const ApiError = require("../error/api.error");
 const {
   SERVER_STARTED_MESSAGE,
   NOT_FOUND_API,
   WELCOME,
-  FAIL
+  FAIL,
 } = require("../constants/apiMessage");
 const Logging = require("../../library/logging");
 const { notFoundApi, emailExists, serverError } = require("../error/generic");
@@ -28,8 +28,7 @@ class genericHelper {
     return res.status(200).send(WELCOME);
   }
 
-
-  static errorResponse( res, error) {
+  static errorResponse(res, error) {
     const aggregateError = { ...serverError, ...error };
     return res.status(aggregateError.status).json({
       statusCode: aggregateError.status,
@@ -37,111 +36,12 @@ class genericHelper {
       errors: aggregateError.errors,
     });
   }
+
+  static asyncWrapper(callback) {
+    return (req, res, next) => {
+      callback(req, res, next).catch(next);
+    };
+  }
 }
 
 module.exports = genericHelper;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // static ifNot(res, arg, statusCode, message) {
-  //   if (!arg) {
-  //     return res.status(statusCode).json({
-  //       message,
-  //     });
-  //   }
-  // }
-
-  // static iF(res, arg, statusCode, message) {
-  //   if (arg) {
-  //     genericHelper.errorResponse(
-  //       res,
-  //       new ApiError({
-  //         message,
-  //         status: statusCode,
-  //       })
-  //     );
-  //   }
-  // }
