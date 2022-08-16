@@ -29,5 +29,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
+  },
+  "peerDependencies": {
+    "ioredis": "^5.2.2"
   }
 }
