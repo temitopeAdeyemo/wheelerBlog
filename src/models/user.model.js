@@ -2,6 +2,7 @@ const {
   createUser,
 } = require("../database/queries/user.query");
 const pool = require("../database/pgsql");
+
 class User {
   constructor(instanceObject) {
     this.firstName = instanceObject.firstName;
@@ -25,7 +26,6 @@ class User {
         this.gender,
         "display_picture",
       ]);
-        console.log("user.rows[0]", user.rows[0])
       return user.rows[0];
     } catch (error) {
       throw error;

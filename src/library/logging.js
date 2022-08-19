@@ -4,6 +4,7 @@ class Logging {
   static log = (args) => {
     this.info(args);
   };
+
   static info = (args) => {
     console.log(
       chalk.cyan(`[${new Date().toLocaleString()}] [INFO]`),
@@ -24,6 +25,7 @@ class Logging {
       typeof args === "string" ? chalk.yellowBright(args) : args
     );
   };
+
   static error = (args) => {
     console.log(
       chalk.red(`[${new Date().toLocaleString()}] [INFO]`),
@@ -32,4 +34,4 @@ class Logging {
   };
 }
 
-module.exports = Logging
+module.exports = Logging;

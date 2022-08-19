@@ -11,4 +11,4 @@ module.exports = class ApiError extends ModuleError {
     this.status = options.status || 500;
   }
 };
-console.log();
+

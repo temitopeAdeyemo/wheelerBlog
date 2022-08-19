@@ -7,18 +7,10 @@ const ApiError = require("../utils/error/api.error");
 const { errorResponse } = require("../utils/helpers/generic");
 const {
   emailConflict,
-  usernameConflict,
-  inValidPassword,
-  notFoundApi,
   inValidLogin,
-  notAuthorized,
   serverError,
 } = require("../utils/error/generic");
-const {
-  hash,
-  createHashedOTP,
-  compare,
-} = require("../utils/helpers/auth");
+const { hash, createHashedOTP, compare } = require("../utils/helpers/auth");
 
 class userMiddleware {
   static async validateUserEmail(req, res, next) {
@@ -35,22 +27,22 @@ class userMiddleware {
     try {
       const { email } = req.body;
       const emailExists = await getUserByEmail(email);
-      emailExists
-        ? (req.user = {
-            id: emailExists.user_id,
-            verified: emailExists.is_verified,
+
+      if (!emailExists) {
+        return errorResponse(
+          res,
+          new ApiError({
+            status: 401,
+            message: "ACCOUNT_DOES_NOT_EXIST",
           })
-        : null;
-      console.log(emailExists);
-      return emailExists
-        ? next()
-        : errorResponse(
-            res,
-            new ApiError({
-              status: 401,
-              message: "ACCOUNT_DOES_NOT_EXIST",
-            })
-          );
+        );
+      }
+
+      req.user = {
+        id: emailExists.user_id,
+        verified: emailExists.is_verified,
+      };
+      next();
     } catch (error) {
       return errorResponse(res, serverError);
     }
@@ -59,15 +51,18 @@ class userMiddleware {
   static async fetchLoginEmail(req, res, next) {
     try {
       const emailExists = await getUserByEmail(req.body.email);
-      emailExists
-        ? (req.user = {
-            id: emailExists.user_id,
-            password: emailExists.password,
-            verified: emailExists.is_verified,
-            firstName: emailExists.first_name,
-          })
-        : null;
-      return emailExists ? next() : errorResponse(res, inValidLogin);
+
+      if (!emailExists) {
+        return errorResponse(res, inValidLogin);
+      }
+
+      req.user = {
+        id: emailExists.user_id,
+        password: emailExists.password,
+        verified: emailExists.is_verified,
+        firstName: emailExists.first_name,
+      };
+      next();
     } catch (error) {
       return errorResponse(res, serverError);
     }
@@ -110,7 +105,6 @@ class userMiddleware {
   static async createOTP(req, res, next) {
     try {
       const hashedOTP = await createHashedOTP();
-      // const hashedOTP = await hash(otp);
       req.user = { ...req.user, hashedOTP };
       next();
     } catch (error) {
@@ -138,6 +132,7 @@ class userMiddleware {
       );
     }
   }
+
   static async validateLoginAccess(req, res, next) {
     try {
       return req.user.verified
@@ -153,10 +148,12 @@ class userMiddleware {
       return errorResponse(res, serverError);
     }
   }
+
   static async handleOTP(req, res, next) {
     try {
       const userOTP = await findVerificationOTP(req.user.id);
       console.log(userOTP);
+
       if (!userOTP) {
         return errorResponse(
           res,
@@ -169,7 +166,7 @@ class userMiddleware {
 
       let hashedOTP = userOTP.verify_email_otp;
       const decodedOtp = await compare(req.body.OTP, hashedOTP);
-      console.log(await compare(req.body.OTP, hashedOTP));
+
       if (!decodedOtp) {
         return errorResponse(
           res,
@@ -189,6 +186,7 @@ class userMiddleware {
           })
         );
       }
+
       req.user = { ...req.user, hashedOTP };
       next();
     } catch (error) {

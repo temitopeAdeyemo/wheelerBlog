@@ -1,7 +1,3 @@
-// module.exports = {
-//   REQUEST_INF0: `Incoming -> Method: [${req.method}] - url: [${req.url}] - Ip: [${req.socket.remoteAddress}]`,
-//   RESPONSE_INF0: `Incoming -> Method: [${req.method}] - url: [${req.url}] - Ip: [${req.socket.remoteAddress}] - Status: [${res.statusCode}]`,
-// };
 const Logging = require("../../library/logging");
 
 class headerMessage {

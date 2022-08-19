@@ -5,8 +5,6 @@ const {
   verifyEmailOTP,
   verifyEmail,
 } = require("../controllers/user.controller");
-
-// const { validateReg } = require("../validation/user.validation");
 const {
   validateRegInfo,
   validateVerificationInfo,
@@ -26,7 +24,6 @@ const {
 } = require("../middlewares/user.middlewares");
 
 const router = express.Router();
-
 router.post(
   "/user/signup",
   validateRegInfo,

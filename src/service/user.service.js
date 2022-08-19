@@ -1,21 +1,16 @@
 const {
-  createUser,
-  findUsers,
   findOneByUsername,
   findOneByEmail,
-  CreateEmailVerificationOtp,
-  DeleteUserOTP,
-  findUserOtp,
   updateVerificationStatus,
 } = require("../database/queries/user.query");
 const pool = require("../database/pgsql");
 const {
-  createVerificationOTP,
   DeleteVerificationOTP,
   findVerificationOTP
 } = require("../database/queries/otp.query");
 const User = require("../models/user.model");
 const UserVerificationOTP = require("../models/user_otp.model");
+
 class UserService {
   static async createUser(instanceObject) {
     const user = new User(instanceObject);

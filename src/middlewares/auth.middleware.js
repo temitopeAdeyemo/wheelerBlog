@@ -1,5 +1,3 @@
-// require dependencies
-// const User = require("../models/user.model");
 const ApiError = require("../utils/error/api.error");
 const pool = require("../database/pgsql");
 const jwt = require("jsonwebtoken");
@@ -15,32 +13,41 @@ require("dotenv").config();
 const authenticate = async (req, res, next) => {
   try {
     let authorization = req.headers.authorization;
+
     if (!authorization) {
       return errorResponse(res, authRequired);
     }
+
     const authenticationArr = authorization.split(" ");
+
     if (authenticationArr[0] !== "Bearer") {
       return errorResponse(
         res,
         new ApiError({ status: 401, message: "Token is required" })
       );
     }
+
     let token = authenticationArr[1];
+    
     if (!token) {
       return errorResponse(
         res,
         new ApiError({ status: 401, message: "Token is required" })
       );
     }
+
     const { JWT_SECRET } = process.env;
     const decryptToken = await jwt.verify(token, JWT_SECRET);
+
     const validUser = await pool.query(
       "SELECT * FROM Users WHERE user_id = $1",
       [decryptToken.id]
     );
+
     if (!validUser.rows[0]) {
       return errorResponse(res, notAuthorized);
     }
+
     decryptToken["role"] = validUser.rows[0].role;
     req.user = decryptToken;
     next();
