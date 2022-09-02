@@ -10,7 +10,7 @@ const {
   validateVerificationInfo,
   validateEmail,
   validateLoginInfo,
-} = require("../middlewares/validate.middleware");
+} = require("../middlewares/userValidation.middleware");
 const {
   validateUserEmail,
   validateUsername,

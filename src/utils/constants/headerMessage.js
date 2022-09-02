@@ -1,6 +1,6 @@
 const Logging = require("../../library/logging");
 
-class headerMessage {
+class HeaderMessage {
   static REQUEST_INF0(req) {
     Logging.info(
       `Incoming -> Method: [${req.method}] - url: [${req.url}] - Ip: [${req.socket.remoteAddress}]`
@@ -12,4 +12,4 @@ class headerMessage {
     );
   }
 }
-module.exports = headerMessage;
+module.exports = HeaderMessage;

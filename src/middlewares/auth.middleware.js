@@ -28,7 +28,7 @@ const authenticate = async (req, res, next) => {
     }
 
     let token = authenticationArr[1];
-    
+
     if (!token) {
       return errorResponse(
         res,
@@ -44,14 +44,24 @@ const authenticate = async (req, res, next) => {
       [decryptToken.id]
     );
 
-    if (!validUser.rows[0]) {
+    const validAdmin = await pool.query(
+      "SELECT * FROM Admins WHERE user_id = $1",
+      [decryptToken.id]
+    );
+    if (!validUser.rows[0] && !validAdmin.rows[0]) {
       return errorResponse(res, notAuthorized);
     }
-
-    decryptToken["role"] = validUser.rows[0].role;
+    if (validAdmin.rows[0]) {
+      decryptToken["role"] = validAdmin.rows[0].role;
+      decryptToken["username"] = validAdmin.rows[0].username;
+    } else {
+      decryptToken["role"] = validUser.rows[0].role;
+      decryptToken["username"] = validUser.rows[0].username;
+    }
     req.user = decryptToken;
     next();
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: error.message,
     });
@@ -66,6 +76,7 @@ const authorize = async (req, res, next) => {
       return errorResponse(res, unAuthorized);
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: error.message,
     });

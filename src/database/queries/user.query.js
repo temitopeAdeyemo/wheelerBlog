@@ -11,5 +11,4 @@ module.exports = {
     "SELECT users.email, users.user_id, verify_email_otp, verify_email_expires_at FROM User_otp INNER JOIN Users ON  User_otp.OwnerId = Users.user_id WHERE OwnerId::text = $1",
   updateVerificationStatus:
     "UPDATE Users SET is_verified = $1 WHERE user_id::text = $2",
-    
 };

@@ -8,7 +8,7 @@ const {
   RESPONSE_INF0,
 } = require("../utils/constants/headerMessage");
 
-class headers {
+class Headers {
   static accessControlSettings(req, res, next) {
     SET_ACCESS_CONTROL_ALLOW_ORIGIN(res);
     SET_ACCESS_CONTROL_ALLOW_HEADERS(res);
@@ -28,4 +28,4 @@ class headers {
   }
 }
 
-module.exports = headers;
+module.exports = Headers;

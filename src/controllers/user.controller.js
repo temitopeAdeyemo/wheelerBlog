@@ -5,11 +5,7 @@ const {
   createHashedOTP,
   signJWT,
 } = require("../utils/helpers/auth");
-const {
-  errorResponse,
-  successResponse,
-  asyncWrapper,
-} = require("../utils/helpers/generic");
+const { successResponse, asyncWrapper } = require("../utils/helpers/generic");
 const {
   deleteVerificationOTP,
   createUser,
@@ -70,6 +66,7 @@ class userController {
       const data = {
         id: req.user.id,
       };
+      console.log(req.user.id, "req.user.id");
       const token = await signJWT(data);
       return successResponse(res, 200, {
         message: `Hi ${req.user.firstName.toUpperCase()}, Welcome back.`,

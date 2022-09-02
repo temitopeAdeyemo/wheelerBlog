@@ -38,4 +38,12 @@ describe("User Endpoints", () => {
   test("adds 6 + 8 to equal 14", () => {
     expect(sum(6, 8)).toBe(14);
   });
+  // const payload = {
+  //   password: "123456789",
+  //   email: "test58@gmail.com",
+  // };
+  // it("should have a status code of 201", async () => {
+  //   const resp = await request.post("/api/v1/user/login").send(payload);
+  //   expect(resp.status).toBe(200);
+  // });
 });

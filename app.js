@@ -1,7 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
-const router = require("./src/routes/user.router");
+const userRouter = require("./src/routes/user.router");
+const adminRouter = require("./src/routes/admin.router");
+const postRouter = require("./src/routes/post.router");
+const ApiError = require("./src/utils/error/api.error");
 const {
   accessControlSettings,
   requestInfo,
@@ -16,20 +19,24 @@ app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(accessControlSettings);
-//Routes
-app.use("/api/v1", router);
 
-app.use((req, res, next) => {
-  return res.status(404).json({ ...notFoundApi });
-});
-app.use((err, req, res, next) => {
-  console.log(err);
-  return next(serverError);
-  // return res.status(500).json({ ...serverError });
-});
-//Base Url
 app.get("/", (req, res, next) => {
   return res.status(200).send(WELCOME);
+});
+
+app.use("/api/v1", userRouter);
+app.use("/api/v1", adminRouter);
+app.use("/api/v1", postRouter);
+
+app.use((req, res, next) => {
+  return next(notFoundApi);
+});
+
+app.use((err, req, res, next) => {
+  console.log(err)
+  let statusCode = err.status || 500;
+  err.status == 404 ? (message = err.message) : (message = "server error");
+  return res.status(statusCode).json({ message, statusCode });
 });
 
 module.exports = { app };

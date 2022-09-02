@@ -1,6 +1,4 @@
-const {
-  createUser,
-} = require("../database/queries/user.query");
+const { createUser } = require("../database/queries/user.query");
 const pool = require("../database/pgsql");
 
 class User {
@@ -35,23 +33,6 @@ class User {
 
 module.exports = User;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // --   CREATE TYPE USER_ROLE AS ENUM ('Admin', 'User');
 // --   CREATE TABLE USERS (
 // -- 	  user_id uuid PRIMARY KEY DEFAULT uuid_generate_v1(),
@@ -81,31 +62,37 @@ module.exports = User;
 // -- 					display_picture varchar(100) NOT NULL
 // --                     );
 
-// --  CREATE TABLE Post(post_id SERIAL PRIMARY KEY NOT NULL,
-// -- 				   poster_username varchar(30) NOT NULL,
-// -- 				   CONSTRAINT fk_poster
-// -- 				   FOREIGN KEY(poster_username)
-// -- 				   REFERENCES admins(username),
-// -- 				   title varchar(40) NOT NULL,
-// --                     body varchar(2000) NOT NULL,
-// --   					comment_count int DEFAULT 0,
-// -- 				   like_count int DEFAULT 0,
-// -- 				   datePosted Date not null,
-// -- 					created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-// --     				updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-// -- 				  );
+// CREATE TABLE Post(post_id SERIAL PRIMARY KEY NOT NULL,
+// 			   poster_username varchar(30) NOT NULL,
+// 			   CONSTRAINT fk_poster
+// 			   FOREIGN KEY(poster_username)
+// 			   REFERENCES admins(username)
+// 				ON DELETE CASCADE,
+// 			   title varchar(40) NOT NULL,
+//                    body varchar(2000) NOT NULL,
+//  					comment_count int DEFAULT 0,
+// 			   likedBy varchar[],
+// 			   datePosted Date not null,
+// 				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+//   				updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+// 			  );
 
-// --  CREATE TABLE Comment(comment_id SERIAL PRIMARY KEY NOT NULL,
-// -- 				   post_id int NOT NULL,
-// -- 				   CONSTRAINT fk_post
-// -- 				   FOREIGN KEY(post_id)
-// -- 				   REFERENCES post(post_id),
-// --                     body varchar(2000) NOT NULL,
-// -- 				   like_count int DEFAULT 0,
-// -- 				   datePosted Date not null,
-// -- 					created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-// --     				updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-// -- 				  );
+// CREATE TABLE Comment(comment_id SERIAL PRIMARY KEY NOT NULL,
+// 				   commenter_username varchar not null,
+// 			CONSTRAINT fk_poster
+// 			   FOREIGN KEY(commenter_username)
+// 			   REFERENCES admins(username)
+// 				   ON DELETE CASCADE,
+// 			   post_id int NOT NULL,
+// 			   CONSTRAINT fk_post
+// 			   FOREIGN KEY(post_id)
+// 			   REFERENCES post(post_id)
+// 				   ON DELETE CASCADE,
+//                    body varchar(2000) NOT NULL,
+// 			   datePosted Date not null,
+// 				created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+//    				updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+// 			  );
 
 // -- CREATE TABLE OTP(
 // -- 	id INT PRIMARY KEY NOT NULL,
